@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tassya/list/list.dart';
 import 'package:tassya/model/TodoEntity.dart';
@@ -18,18 +17,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var field = TodoTextField();
+    TodoList todoListWidget = TodoList(todoList: todoList);
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
-        child: _createTodoList(todoList),
+        bottom: false,
+        child: todoListWidget,
       ),
       floatingActionButton: Padding(
           padding: EdgeInsets.all(16.0),
           child: _getFloatingActionButton(onPressed: () {
-            setState(() {
-              todoList.add(TodoEntity(DateTime.now().toString()));
-            });
+            todoListWidget.onClick();
           })),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
@@ -47,35 +45,6 @@ class _MyHomePageState extends State<MyHomePage> {
       onPressed: onPressed,
       child: Icon(Icons.add, semanticLabel: 'Action'),
       backgroundColor: Colors.orange,
-    );
-  }
-
-  Widget _createTodoList(List<TodoEntity> todoList) {
-    return TodoList(
-      todoList: todoList,
-    );
-  }
-}
-
-class TodoTextField extends StatefulWidget {
-  final _TodoTextFieldState state = _TodoTextFieldState();
-
-  @override
-  State<StatefulWidget> createState() => state;
-}
-
-class _TodoTextFieldState extends State<TodoTextField> {
-  String text = "";
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      onChanged: (String text) {
-        this.text = text;
-      },
-      keyboardType: TextInputType.multiline,
-      maxLines: 5,
-      decoration: InputDecoration.collapsed(hintText: 'Enter your TODO...'),
     );
   }
 }
