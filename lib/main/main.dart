@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tassya/bloc/ApplicationStateProvider.dart';
+import 'package:tassya/bloc/TodoBloc.dart';
 import 'package:tassya/list/list.dart';
 import 'package:tassya/model/TodoEntity.dart';
 
@@ -17,17 +19,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    TodoList todoListWidget = TodoList(todoList: todoList);
+    TodoBloc stateBloc = ApplicationStateProvider.of(context);
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
         bottom: false,
-        child: todoListWidget,
+        child: TodoBlocWidget(),
       ),
       floatingActionButton: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(
+            bottom: 16.0,
+          ),
           child: _getFloatingActionButton(onPressed: () {
-            todoListWidget.onClick();
+            stateBloc.onAddClicked(Object());
           })),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
